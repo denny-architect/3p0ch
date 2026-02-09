@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Log - 3p0ch | AI Combat Robot</title>
+    <meta name="description" content="Follow the build progress of 3p0ch - hardware assembly, testing, and preparation for autonomous combat">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #000000;
+            --bg-card: #1A1A1A;
+            --border: #333333;
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --accent-cyan: #00FFFF;
+            --accent-red: #FF3333;
+            --accent-gold: #FFD700;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--accent-cyan);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-cyan);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Build Status Banner */
+        .status-banner {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .status-description {
+            font-size: 1rem;
+            color: var(--text-primary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Progress Tracker */
+        .progress-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-red));
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .progress-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .progress-card.complete {
+            border-color: var(--accent-cyan);
+        }
+
+        .progress-card.in-progress {
+            border-color: var(--accent-gold);
+        }
+
+        .progress-card.pending {
+            border-color: var(--border);
+            opacity: 0.6;
+        }
+
+        .progress-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan) 0%, var(--accent-gold) 100%);
+        }
+
+        .progress-card.pending::before {
+            background: var(--border);
+        }
+
+        .progress-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress-status {
+            display: inline-block;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .progress-status.complete {
+            background: rgba(0, 255, 255, 0.2);
+            color: var(--accent-cyan);
+        }
+
+        .progress-status.in-progress {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--accent-gold);
+        }
+
+        .progress-status.pending {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+
+        .progress-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .progress-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-gold));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            border-color: var(--accent-cyan);
+            transform: translateX(10px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            border: 2px solid var(--bg-dark);
+        }
+
+        .timeline-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Media Grid */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .media-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .media-card:hover {
+            border-color: var(--accent-cyan);
+            transform: scale(1.02);
+        }
+
+        .media-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .media-content {
+            padding: 1.5rem;
+        }
+
+        .media-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .media-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Video Section */
+        .video-section {
+            margin-bottom: 4rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .video-card:hover {
+            border-color: var(--accent-cyan);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 300px;
+            background: #000;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .video-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .progress-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .main-content {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-content">
+            <a href="index.html" class="logo-link">
+                <div class="logo-text">3p0ch</div>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="tech.html">Tech</a></li>
+                    <li><a href="build.html" class="active">Build</a></li>
+                    <li><a href="compete.html">Compete</a></li>
+                    <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Build Progress</h1>
+            <p>From CAD to combat-ready: tracking every milestone of 3p0ch's journey to the arena</p>
+        </div>
+
+        <!-- Status Banner -->
+        <div class="status-banner">
+            <div class="status-label">Current Status</div>
+            <div class="status-value">Phase 1: In Progress</div>
+            <div class="status-description">
+                Hardware arriving, CAD designs finalized, assembly starting soon. 
+                First observational event: Sacramento Bot Battles, March 20-21, 2026.
+            </div>
+        </div>
+
+        <!-- Build Progress Tracker -->
+        <section class="progress-section">
+            <h2 class="section-title">Build Milestones</h2>
+            <div class="progress-grid">
+                <div class="progress-card complete">
+                    <span class="progress-status complete">✓ Complete</span>
+                    <div class="progress-title">Design & CAD</div>
+                    <div class="progress-description">
+                        Chassis designed in Fusion 360. Weight budget calculated. 
+                        Component layout optimized for balance and AI hardware integration.
+                    </div>
+                    <div class="progress-date">Completed: Feb 2026</div>
+                </div>
+
+                <div class="progress-card in-progress">
+                    <span class="progress-status in-progress">● In Progress</span>
+                    <div class="progress-title">Hardware Procurement</div>
+                    <div class="progress-description">
+                        Bambu Lab P1S ordered. Motors, battery, FPV system on the way. 
+                        Waiting for delivery to begin assembly.
+                    </div>
+                    <div class="progress-date">Expected: Mid-Feb 2026</div>
+                </div>
+
+                <div class="progress-card pending">
+                    <span class="progress-status pending">○ Pending</span>
+                    <div class="progress-title">3D Printing</div>
+                    <div class="progress-description">
+                        Print PETG-CF chassis components. Test fit and iterate if needed. 
+                        Estimated 12-16 hours total print time.
+                    </div>
+                    <div class="progress-date">Target: Late Feb 2026</div>
+                </div>
+
+                <div class="progress-card pending">
+                    <span class="progress-status pending">○ Pending</span>
+                    <div class="progress-title">Drivetrain Assembly</div>
+                    <div class="progress-description">
+                        Install motors, wheels, and drive electronics. Wire FPV camera and transmitter. 
+                        Initial movement tests.
+                    </div>
+                    <div class="progress-date">Target: Late Feb 2026</div>
+                </div>
+
+                <div class="progress-card pending">
+                    <span class="progress-status pending">○ Pending</span>
+                    <div class="progress-title">Weight Verification</div>
+                    <div class="progress-description">
+                        Confirm robot weighs under 1360g (3 lb limit). Make adjustments if needed. 
+                        Balance and center of gravity checks.
+                    </div>
+                    <div class="progress-date">Target: Early Mar 2026</div>
+                </div>
+
+                <div class="progress-card pending">
+                    <span class="progress-status pending">○ Pending</span>
+                    <div class="progress-title">Battle Readiness</div>
+                    <div class="progress-description">
+                        Drive tests, durability checks, backup parts ready. 
+                        Confirm NHRL rules compliance. Ready for Sacramento.
+                    </div>
+                    <div class="progress-date">Target: Mar 20, 2026</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Build Timeline -->
+        <section class="progress-section">
+            <h2 class="section-title">Build Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Feb 7, 2026</div>
+                    <div class="timeline-title">Project Kickoff</div>
+                    <div class="timeline-description">
+                        3p0ch project officially started. Initial CAD design completed in Fusion 360. 
+                        Weight budget calculated at ~1310g with room for Phase 2 AI hardware.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Feb 9, 2026</div>
+                    <div class="timeline-title">Website Launch</div>
+                    <div class="timeline-description">
+                        Project website published at GitHub Pages. Tech stack, roadmap, and build log documented. 
+                        Repository set up with proper .gitignore to protect competitive strategy.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Mid-Feb 2026</div>
+                    <div class="timeline-title">Hardware Delivery</div>
+                    <div class="timeline-description">
+                        Bambu Lab P1S 3D printer arrives. Component packages delivered: motors, battery, FPV gear, 
+                        electronics. Ready to begin physical assembly.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Late Feb 2026</div>
+                    <div class="timeline-title">First Assembly</div>
+                    <div class="timeline-description">
+                        Chassis printed and assembled. Drivetrain installed. First power-on tests. 
+                        FPV system configured and range-tested.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Mar 20-21, 2026</div>
+                    <div class="timeline-title">Sacramento Bot Battles (Observational)</div>
+                    <div class="timeline-description">
+                        Attending to observe arena dynamics, opponent strategies, and fight pacing. 
+                        Networking with builders. Scouting for first competition.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Q2 2026</div>
+                    <div class="timeline-title">First Competition</div>
+                    <div class="timeline-description">
+                        Date TBD. Manual combat mode. Fight footage captured for AI training pipeline. 
+                        Begin data collection for Phase 2 vision system.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Build Gallery -->
+        <section class="progress-section">
+            <h2 class="section-title">Build Gallery</h2>
+            <div class="media-grid">
+                <div class="media-card">
+                    <img src="images/blueprint-schematic.jpg" alt="CAD Blueprint" class="media-image">
+                    <div class="media-content">
+                        <div class="media-title">CAD Design</div>
+                        <div class="media-description">
+                            Fusion 360 chassis design with modular component mounting. 
+                            Optimized for weight, balance, and future AI hardware integration.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-card">
+                    <img src="images/exploded-wireframe.jpg" alt="Exploded View" class="media-image">
+                    <div class="media-content">
+                        <div class="media-title">Component Layout</div>
+                        <div class="media-description">
+                            Exploded view showing drivetrain, electronics, and structural elements. 
+                            Every gram accounted for in the 3 lb weight budget.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-card">
+                    <img src="images/combat-hud.jpg" alt="Combat HUD Mockup" class="media-image">
+                    <div class="media-content">
+                        <div class="media-title">Future Vision System</div>
+                        <div class="media-description">
+                            Phase 2 vision overlay mockup. YOLOv8 object detection with real-time 
+                            opponent tracking and distance estimation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Footage Section -->
+        <section class="video-section">
+            <h2 class="section-title">Test Footage</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <video class="video-player" controls playsinline webkit-playsinline poster="images/hero-render.jpg">
+                        <source src="images/video-combat-ignition.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-info">
+                        <div class="video-title">Combat Ignition</div>
+                        <div class="video-description">
+                            Pre-fight power-up sequence. Systems check, FPV link established, ready to deploy.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <video class="video-player" controls playsinline webkit-playsinline poster="images/hero-render.jpg">
+                        <source src="images/video-combat-action.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-info">
+                        <div class="video-title">Combat Action</div>
+                        <div class="video-description">
+                            High-speed maneuvering and engagement simulation. Testing drive responsiveness and FPV control.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>
+                <strong style="color: var(--accent-cyan);">3p0ch</strong> - AI Combat Robot | 
+                <a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a> | 
+                <a href="https://nhrl.io/" target="_blank">NHRL</a>
+            </p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+                This is a hobbyist robotics project. Not affiliated with military or defense applications.
+            </p>
+            <p style="margin-top: 1rem; color: var(--text-secondary);">© 2026 3p0ch</p>
+        </div>
+    </footer>
+</body>
+</html>
