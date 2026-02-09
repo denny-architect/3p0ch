@@ -33,7 +33,7 @@
         }
 
         /* NAVIGATION */
-        nav {
+        .header {
             position: fixed;
             top: 0;
             left: 0;
@@ -53,13 +53,19 @@
             align-items: center;
         }
 
-        .logo {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.5rem;
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--cyan);
-            text-shadow: 0 0 20px var(--cyan);
             letter-spacing: 0.1em;
+            color: var(--cyan);
         }
 
         .nav-links {
@@ -69,18 +75,15 @@
         }
 
         .nav-links a {
-            color: var(--text-light);
+            color: var(--text-dim);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--cyan);
-            text-shadow: 0 0 10px var(--cyan);
         }
 
         /* HERO SECTION */
@@ -470,8 +473,12 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            nav {
+            .header {
                 padding: 1rem;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
             }
 
             .nav-links {
@@ -516,19 +523,23 @@
     </style>
 </head>
 <body>
-    <!-- NAVIGATION -->
-    <nav>
+    <!-- HEADER -->
+    <header class="header">
         <div class="nav-content">
-            <div class="logo">3p0ch</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="tech.html">Tech</a></li>
-                <li><a href="build.html">Build</a></li>
-                <li><a href="compete.html">Compete</a></li>
-                <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
-            </ul>
+            <a href="index.html" class="logo-link">
+                <div class="logo-text">3p0ch</div>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="tech.html">Tech</a></li>
+                    <li><a href="build.html">Build</a></li>
+                    <li><a href="compete.html">Compete</a></li>
+                    <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
         </div>
-    </nav>
+    </header>
 
     <!-- HERO SECTION -->
     <section class="hero" id="home">
