@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3p0ch | AI Combat Robot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-black: #000000;
+            --bg-card: #1A1A1A;
+            --cyan: #00FFFF;
+            --red: #FF3333;
+            --text-light: #E0E0E0;
+            --text-dim: #999999;
+            --border: #333333;
+        }
+
+        body {
+            background: var(--bg-black);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* NAVIGATION */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cyan);
+            text-shadow: 0 0 20px var(--cyan);
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 60px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('images/3p0ch/hero-render.jpg') center/cover no-repeat;
+            filter: brightness(0.3);
+            z-index: -1;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .hero-title .char-3 { color: var(--cyan); text-shadow: 0 0 30px var(--cyan); }
+        .hero-title .char-p { color: #FFFFFF; }
+        .hero-title .char-0 { color: #FFD700; text-shadow: 0 0 30px #FFD700; }
+        .hero-title .char-c { color: #4A90E2; }
+        .hero-title .char-h { color: var(--cyan); text-shadow: 0 0 30px var(--cyan); }
+
+        .hero-subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.3em;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+
+        .status-value.training {
+            color: var(--red);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* STATS GRID */
+        .stats-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--red));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.2);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--cyan);
+            line-height: 1;
+        }
+
+        .stat-unit {
+            font-size: 1rem;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .stat-description {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        /* WHAT IS SECTION */
+        .what-is-section {
+            padding: 6rem 2rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .what-is-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .what-is-text h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .what-is-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .what-is-text .highlight {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        .what-is-image {
+            position: relative;
+        }
+
+        .what-is-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 50px rgba(0, 255, 255, 0.1);
+        }
+
+        /* TECH STACK */
+        .tech-section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--cyan);
+            letter-spacing: 0.1em;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tech-item:hover {
+            border-color: var(--cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .tech-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+            filter: brightness(0.8);
+            transition: filter 0.3s ease;
+        }
+
+        .tech-item:hover img {
+            filter: brightness(1);
+        }
+
+        .tech-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(255, 51, 51, 0.05));
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--cyan);
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: var(--cyan);
+            color: var(--bg-black);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--cyan);
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            color: var(--cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 3rem 2rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--cyan);
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+                letter-spacing: 0.1em;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .status-bar {
+                gap: 1.5rem;
+            }
+
+            .status-value {
+                font-size: 1.5rem;
+            }
+
+            .what-is-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .what-is-text h2 {
+                font-size: 2rem;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 1rem;
+            }
+
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">3p0ch</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#build">Build</a></li>
+                <li><a href="#tech">Tech</a></li>
+                <li><a href="#compete">Compete</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="char-3">3</span><span class="char-p">p</span><span class="char-0">0</span><span class="char-c">c</span><span class="char-h">h</span>
+            </h1>
+            <div class="hero-subtitle">BEETLEWEIGHT AI COMBAT ROBOT</div>
+            <p class="hero-tagline">Training... One Epoch at a Time</p>
+            
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-label">EPOCH</div>
+                    <div class="status-value">01</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">STATUS</div>
+                    <div class="status-value training">TRAINING</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">NEXT EVENT</div>
+                    <div class="status-value">MAR 20-21</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS SECTION -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-icon">⚖️</span>
+                <div class="stat-label">Weight Class</div>
+                <div class="stat-value">3 <span class="stat-unit">lb</span></div>
+                <p class="stat-description">Beetleweight division. Target: 1330g (30g margin)</p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon">⚡</span>
+                <div class="stat-label">Power System</div>
+                <div class="stat-value">2S <span class="stat-unit">LiPo</span></div>
+                <p class="stat-description">7.4V 450mAh Tattu battery. Optimized for 3-minute matches</p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon">🧠</span>
+                <div class="stat-label">AI Compute</div>
+                <div class="stat-value">8 <span class="stat-unit">GB</span></div>
+                <p class="stat-description">NVIDIA Jetson Orin Nano. YOLOv8 object detection</p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon">📅</span>
+                <div class="stat-label">First Event</div>
+                <div class="stat-value">MAR 20-21</div>
+                <p class="stat-description">Sacramento Bot Battles (Observational)</p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon">🎯</span>
+                <div class="stat-label">First Fight</div>
+                <div class="stat-value">TBD</div>
+                <p class="stat-description">When hardware arrives & bot is ready</p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon">🏆</span>
+                <div class="stat-label">League</div>
+                <div class="stat-value">NHRL</div>
+                <p class="stat-description">National Havoc Robot League</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT IS 3P0CH -->
+    <section class="what-is-section">
+        <div class="what-is-content">
+            <div class="what-is-text">
+                <h2>What is 3p0ch?</h2>
+                <p>
+                    <span class="highlight">3p0ch</span> (pronounced "Epoch") is the first hobbyist-level AI-autonomous combat robot that learns from its losses.
+                </p>
+                <p>
+                    Built with an onboard <span class="highlight">NVIDIA Jetson Orin Nano</span>, 3p0ch captures training data during matches and stores it in <span class="highlight">MinIO AIStor</span> for AI model refinement.
+                </p>
+                <p>
+                    Every fight is a new epoch. Every loss is a learning opportunity. The robot improves with each iteration.
+                </p>
+                <p style="font-weight: 600; color: var(--cyan); font-size: 1.2rem; margin-top: 2rem;">
+                    The robot learns from its losses.
+                </p>
+            </div>
+            <div class="what-is-image">
+                <img src="images/3p0ch/combat-hud.jpg" alt="3p0ch Combat HUD">
+            </div>
+        </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section class="tech-section" id="tech">
+        <h2 class="section-title">POWERED BY</h2>
+        <div class="tech-grid">
+            <div class="tech-item">
+                <img src="images/logos/nvidia.png" alt="NVIDIA">
+                <div class="tech-name">NVIDIA Jetson</div>
+            </div>
+            <div class="tech-item">
+                <img src="images/logos/minio.png" alt="MinIO">
+                <div class="tech-name">MinIO AIStor</div>
+            </div>
+            <div class="tech-item">
+                <img src="images/logos/yolov8.png" alt="YOLOv8">
+                <div class="tech-name">YOLOv8</div>
+            </div>
+            <div class="tech-item">
+                <img src="images/logos/pytorch.png" alt="PyTorch">
+                <div class="tech-name">PyTorch</div>
+            </div>
+            <div class="tech-item">
+                <img src="images/logos/bambu-lab.png" alt="Bambu Lab">
+                <div class="tech-name">Bambu Lab</div>
+            </div>
+            <div class="tech-item">
+                <img src="images/logos/fusion360.png" alt="Fusion 360">
+                <div class="tech-name">Fusion 360</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="cta-section">
+        <h2>Follow the Build</h2>
+        <p>Track the journey from concept to autonomous combat robot. Updates, progress, and fight results.</p>
+        <a href="https://github.com/denny-architect/3p0ch" class="cta-button" target="_blank">View on GitHub</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">3p0ch v0.1</div>
+            <p class="footer-text">Building the first hobbyist AI-autonomous combat robot that learns from its losses</p>
+            <div class="footer-links">
+                <a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a>
+                <a href="https://nhrl.io/" target="_blank">NHRL</a>
+                <a href="https://discord.gg/nhrl" target="_blank">Discord</a>
+            </div>
+            <p class="footer-disclaimer">
+                Sport combat robot. NOT affiliated with military, defense, or weapons development.
+            </p>
+            <p class="footer-text" style="margin-top: 2rem;">
+                © 2026 3p0ch • Epoch: 01 • First Event: MAR 20-21
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

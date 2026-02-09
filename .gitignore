@@ -1,0 +1,12 @@
+# MacOS
+.DS_Store
+
+# Private documentation
+*.private.md
+notes/
+drafts/
+
+# Future: Training data
+training-data/
+models/
+logs/
