@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Stack - 3p0ch | AI Combat Robot</title>
+    <meta name="description" content="Technical specifications and AI training pipeline for 3p0ch - the first hobbyist AI-autonomous combat robot">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #000000;
+            --bg-card: #1A1A1A;
+            --border: #333333;
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --accent-cyan: #00FFFF;
+            --accent-red: #FF3333;
+            --accent-gold: #FFD700;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--accent-cyan);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-cyan);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Section */
+        .tech-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-red));
+        }
+
+        /* Specs Grid */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .spec-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan) 0%, var(--accent-red) 100%);
+        }
+
+        .spec-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-5px);
+        }
+
+        .spec-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .spec-detail {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Component Breakdown */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .component-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .component-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-5px);
+        }
+
+        .component-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .component-content {
+            padding: 1.5rem;
+        }
+
+        .component-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .component-category {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .component-specs {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .component-specs li {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .component-specs li:last-child {
+            border-bottom: none;
+        }
+
+        .component-specs strong {
+            color: var(--accent-cyan);
+        }
+
+        /* Phase Roadmap */
+        .phase-roadmap {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .phase-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 2rem;
+            border-radius: 8px;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .phase-card:hover {
+            border-left-color: var(--accent-gold);
+            transform: translateX(10px);
+        }
+
+        .phase-card.active {
+            border-left-color: var(--accent-gold);
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.05) 0%, transparent 100%);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .phase-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            background: rgba(0, 255, 255, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+        }
+
+        .phase-status {
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .phase-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .phase-features {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .phase-features li {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .phase-features li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+            font-size: 1.2rem;
+        }
+
+        /* Data Pipeline Diagram */
+        .pipeline-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .pipeline-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pipeline-step {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--accent-cyan);
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .pipeline-step-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .pipeline-step-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pipeline-step-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pipeline-steps {
+                flex-direction: column;
+            }
+
+            .pipeline-step::after {
+                content: '↓';
+                right: auto;
+                bottom: -1.5rem;
+                top: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .phase-features {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-content">
+            <a href="index.html" class="logo-link">
+                <div class="logo-text">3p0ch</div>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="tech.html" class="active">Tech</a></li>
+                    <li><a href="build.html">Build</a></li>
+                    <li><a href="compete.html">Compete</a></li>
+                    <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Tech Arsenal</h1>
+            <p>The hardware, software, and AI pipeline powering 3p0ch's autonomous combat capabilities</p>
+        </div>
+
+        <!-- Core Specifications -->
+        <section class="tech-section">
+            <h2 class="section-title">Core Specifications</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-label">Weight Class</div>
+                    <div class="spec-value">3 lb</div>
+                    <div class="spec-detail">NHRL Beetleweight Division</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Drive System</div>
+                    <div class="spec-value">2WD Tank</div>
+                    <div class="spec-detail">22mm planetary motors @ 730 RPM</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Power</div>
+                    <div class="spec-value">2S LiPo</div>
+                    <div class="spec-detail">7.4V / 450 mAh Tattu</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Compute</div>
+                    <div class="spec-value">Jetson Orin Nano</div>
+                    <div class="spec-detail">8GB LPDDR5 / 40 TOPS AI</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Vision</div>
+                    <div class="spec-value">FPV Camera</div>
+                    <div class="spec-detail">800TVL 2.8mm wide angle</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-label">Data Storage</div>
+                    <div class="spec-value">MinIO AIStor</div>
+                    <div class="spec-detail">S3-compatible AI data lake</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Component Breakdown -->
+        <section class="tech-section">
+            <h2 class="section-title">Component Breakdown</h2>
+            <div class="component-grid">
+                <!-- NVIDIA Jetson -->
+                <div class="component-card">
+                    <img src="images/exploded-wireframe.jpg" alt="NVIDIA Jetson Orin Nano" class="component-image">
+                    <div class="component-content">
+                        <div class="component-name">NVIDIA Jetson Orin Nano</div>
+                        <div class="component-category">Edge AI Compute</div>
+                        <ul class="component-specs">
+                            <li><strong>Performance:</strong> 40 TOPS AI</li>
+                            <li><strong>Memory:</strong> 8GB LPDDR5</li>
+                            <li><strong>Power:</strong> 5-15W</li>
+                            <li><strong>Framework:</strong> PyTorch, TensorRT</li>
+                        </ul>
+                        <p class="spec-detail">Onboard inference for real-time object detection and decision-making during fights</p>
+                    </div>
+                </div>
+
+                <!-- MinIO AIStor -->
+                <div class="component-card">
+                    <img src="images/blueprint-schematic.jpg" alt="MinIO AIStor" class="component-image">
+                    <div class="component-content">
+                        <div class="component-name">MinIO AIStor</div>
+                        <div class="component-category">AI Data Lake</div>
+                        <ul class="component-specs">
+                            <li><strong>Protocol:</strong> S3-compatible API</li>
+                            <li><strong>Function:</strong> Training data storage</li>
+                            <li><strong>Integration:</strong> PromptObject auto-labeling</li>
+                            <li><strong>Workflow:</strong> Fight video → MinIO → Label → Train</li>
+                        </ul>
+                        <p class="spec-detail">Centralized repository for fight footage, labeled training data, and model checkpoints</p>
+                    </div>
+                </div>
+
+                <!-- YOLOv8 Vision -->
+                <div class="component-card">
+                    <img src="images/training-status.jpg" alt="YOLOv8 Object Detection" class="component-image">
+                    <div class="component-content">
+                        <div class="component-name">YOLOv8</div>
+                        <div class="component-category">Object Detection</div>
+                        <ul class="component-specs">
+                            <li><strong>Model:</strong> YOLOv8n (nano)</li>
+                            <li><strong>Classes:</strong> Opponent, Arena, Weapon</li>
+                            <li><strong>FPS:</strong> 60+ on Jetson Orin Nano</li>
+                            <li><strong>Training:</strong> Custom dataset from fights</li>
+                        </ul>
+                        <p class="spec-detail">Real-time detection and tracking of opponents, hazards, and arena boundaries</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Pipeline -->
+        <section class="tech-section">
+            <h2 class="section-title">AI Training Pipeline</h2>
+            <div class="pipeline-diagram">
+                <div class="pipeline-steps">
+                    <div class="pipeline-step">
+                        <div class="pipeline-step-number">STEP 01</div>
+                        <div class="pipeline-step-title">Fight Recording</div>
+                        <div class="pipeline-step-desc">FPV camera captures 800TVL combat footage</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="pipeline-step-number">STEP 02</div>
+                        <div class="pipeline-step-title">Upload to MinIO</div>
+                        <div class="pipeline-step-desc">Raw video stored in AIStor bucket</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="pipeline-step-number">STEP 03</div>
+                        <div class="pipeline-step-title">Auto-Labeling</div>
+                        <div class="pipeline-step-desc">PromptObject labels opponents & hazards</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="pipeline-step-number">STEP 04</div>
+                        <div class="pipeline-step-title">Model Training</div>
+                        <div class="pipeline-step-desc">PyTorch fine-tunes YOLOv8 on new data</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="pipeline-step-number">STEP 05</div>
+                        <div class="pipeline-step-title">Deploy to Robot</div>
+                        <div class="pipeline-step-desc">Updated model loaded to Jetson for next fight</div>
+                    </div>
+                </div>
+            </div>
+            <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem; font-size: 1.1rem;">
+                <strong style="color: var(--accent-cyan);">The Learning Loop:</strong> Every fight generates new training data. Every loss makes the next iteration smarter.
+            </p>
+        </section>
+
+        <!-- Phase Roadmap -->
+        <section class="tech-section">
+            <h2 class="section-title">Development Roadmap</h2>
+            <div class="phase-roadmap">
+                <!-- Phase 1 -->
+                <div class="phase-card active">
+                    <div class="phase-header">
+                        <div class="phase-number">PHASE 01</div>
+                        <div class="phase-status">● In Progress</div>
+                    </div>
+                    <div class="phase-title">Manual Combat Bot</div>
+                    <div class="phase-description">
+                        Build and prove the mechanical platform. Fight manually via FPV remote control. 
+                        Capture fight footage and establish the data collection workflow.
+                    </div>
+                    <ul class="phase-features">
+                        <li>2WD drivetrain assembly</li>
+                        <li>FPV camera + transmitter</li>
+                        <li>Remote control via FlySky</li>
+                        <li>3D-printed PETG-CF chassis</li>
+                        <li>Weight optimization (1360g max)</li>
+                        <li>Fight data capture pipeline</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-number">PHASE 02</div>
+                        <div class="phase-status">Planned</div>
+                    </div>
+                    <div class="phase-title">Vision + Tracking</div>
+                    <div class="phase-description">
+                        Add Jetson Orin Nano and YOLOv8 for real-time opponent detection and tracking. 
+                        Still manually controlled, but with visual overlays and telemetry.
+                    </div>
+                    <ul class="phase-features">
+                        <li>Jetson Orin Nano integration</li>
+                        <li>YOLOv8 object detection</li>
+                        <li>Opponent tracking overlay</li>
+                        <li>Real-time distance estimation</li>
+                        <li>Arena boundary detection</li>
+                        <li>Training dataset creation</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-number">PHASE 03</div>
+                        <div class="phase-status">Planned</div>
+                    </div>
+                    <div class="phase-title">Targeting Assist</div>
+                    <div class="phase-description">
+                        Semi-autonomous mode: human pilots, AI suggests attack angles and optimal positioning. 
+                        Hybrid control with AI-assisted decision-making.
+                    </div>
+                    <ul class="phase-features">
+                        <li>Attack angle suggestions</li>
+                        <li>Optimal positioning hints</li>
+                        <li>Hazard avoidance warnings</li>
+                        <li>Predictive tracking</li>
+                        <li>Semi-autonomous maneuvers</li>
+                        <li>Fight strategy logging</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-number">PHASE 04</div>
+                        <div class="phase-status">Future</div>
+                    </div>
+                    <div class="phase-title">Full Autonomous</div>
+                    <div class="phase-description">
+                        AI takes full control. 3p0ch fights independently, adapting strategy in real-time based on 
+                        learned behaviors from previous fights. The final evolution.
+                    </div>
+                    <ul class="phase-features">
+                        <li>Fully autonomous combat</li>
+                        <li>Real-time strategy adaptation</li>
+                        <li>Opponent behavior prediction</li>
+                        <li>Dynamic weapon targeting</li>
+                        <li>Arena hazard navigation</li>
+                        <li>Continuous learning loop</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>
+                <strong style="color: var(--accent-cyan);">3p0ch</strong> - AI Combat Robot | 
+                <a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a> | 
+                <a href="https://nhrl.io/" target="_blank">NHRL</a>
+            </p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+                This is a hobbyist robotics project. Not affiliated with military or defense applications.
+            </p>
+            <p style="margin-top: 1rem; color: var(--text-secondary);">© 2026 3p0ch</p>
+        </div>
+    </footer>
+</body>
+</html>
