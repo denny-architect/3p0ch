@@ -40,10 +40,10 @@
 **Training:**
 - MinIO AIStor (object storage)
 - PyTorch deep learning
-- NVIDIA Jetson AGX Thor (future)
+- NVIDIA Jetson AGX Thor (training workstation)
 
 **Fabrication:**
-- Bambu Lab P2S 3D printer
+- Bambu Lab P1S 3D printer
 - Fusion 360 CAD design
 - PETG-CF frame material
 
@@ -72,3 +72,5 @@ NOT affiliated with military, defense, or weapons development.
 ---
 
 **© 2026 3p0ch • Training... One Epoch at a Time**
+
+<!-- Last updated: 2026-02-09 -->
