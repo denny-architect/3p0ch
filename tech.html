@@ -469,12 +469,23 @@
                 padding: 1rem;
             }
 
+            .nav-content {
+                position: relative;
+            }
+
             .logo-text {
                 font-size: 1.5rem;
             }
 
             .mobile-menu-toggle {
                 display: block;
+            }
+
+            .nav-right {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             .nav-links {
@@ -819,6 +830,14 @@
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navLinks = document.getElementById('navLinks');
         
+        // Ensure menu is closed on page load
+        if (navLinks) {
+            navLinks.classList.remove('active');
+        }
+        if (mobileMenuToggle) {
+            mobileMenuToggle.textContent = '☰';
+        }
+        
         if (mobileMenuToggle) {
             mobileMenuToggle.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
@@ -831,6 +850,14 @@
                     navLinks.classList.remove('active');
                     mobileMenuToggle.textContent = '☰';
                 });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    mobileMenuToggle.textContent = '☰';
+                }
             });
         }
     </script>

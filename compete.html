@@ -50,6 +50,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
         .logo-link {
@@ -493,12 +500,23 @@
                 padding: 1rem;
             }
 
+            .nav-content {
+                position: relative;
+            }
+
             .logo-text {
                 font-size: 1.5rem;
             }
 
             .mobile-menu-toggle {
                 display: block;
+            }
+
+            .nav-right {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             .nav-links {
@@ -573,18 +591,20 @@
             <a href="index.html" class="logo-link">
                 <div class="logo-text">3p0ch</div>
             </a>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                ☰
-            </button>
-            <nav>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="tech.html">Tech</a></li>
-                    <li><a href="build.html">Build</a></li>
-                    <li><a href="compete.html" class="active">Compete</a></li>
-                    <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
-                </ul>
-            </nav>
+            <div class="nav-right">
+                <nav>
+                    <ul class="nav-links" id="navLinks">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tech.html">Tech</a></li>
+                        <li><a href="build.html">Build</a></li>
+                        <li><a href="compete.html" class="active">Compete</a></li>
+                        <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    ☰
+                </button>
+            </div>
         </div>
     </header>
 
@@ -744,6 +764,14 @@
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navLinks = document.getElementById('navLinks');
         
+        // Ensure menu is closed on page load
+        if (navLinks) {
+            navLinks.classList.remove('active');
+        }
+        if (mobileMenuToggle) {
+            mobileMenuToggle.textContent = '☰';
+        }
+        
         if (mobileMenuToggle) {
             mobileMenuToggle.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
@@ -756,6 +784,14 @@
                     navLinks.classList.remove('active');
                     mobileMenuToggle.textContent = '☰';
                 });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    mobileMenuToggle.textContent = '☰';
+                }
             });
         }
     </script>
