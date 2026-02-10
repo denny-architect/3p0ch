@@ -50,6 +50,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
         .logo-link {
@@ -543,18 +550,20 @@
             <a href="index.html" class="logo-link">
                 <div class="logo-text">3p0ch</div>
             </a>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                ☰
-            </button>
-            <nav>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="tech.html" class="active">Tech</a></li>
-                    <li><a href="build.html">Build</a></li>
-                    <li><a href="compete.html">Compete</a></li>
-                    <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
-                </ul>
-            </nav>
+            <div class="nav-right">
+                <nav>
+                    <ul class="nav-links" id="navLinks">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tech.html" class="active">Tech</a></li>
+                        <li><a href="build.html">Build</a></li>
+                        <li><a href="compete.html">Compete</a></li>
+                        <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    ☰
+                </button>
+            </div>
         </div>
     </header>
 
@@ -614,7 +623,7 @@
             <div class="component-grid">
                 <!-- NVIDIA Jetson -->
                 <div class="component-card">
-                    <img src="images/3p0ch/exploded-wireframe.jpg" alt="NVIDIA Jetson Orin Nano" class="component-image">
+                    <img src="images/exploded-wireframe.jpg" alt="NVIDIA Jetson Orin Nano" class="component-image">
                     <div class="component-content">
                         <div class="component-name">NVIDIA Jetson Orin Nano</div>
                         <div class="component-category">Edge AI Compute</div>
@@ -630,7 +639,7 @@
 
                 <!-- MinIO AIStor -->
                 <div class="component-card">
-                    <img src="images/3p0ch/blueprint-schematic.jpg" alt="MinIO AIStor" class="component-image">
+                    <img src="images/blueprint-schematic.jpg" alt="MinIO AIStor" class="component-image">
                     <div class="component-content">
                         <div class="component-name">MinIO AIStor</div>
                         <div class="component-category">AI Data Lake</div>
@@ -646,7 +655,7 @@
 
                 <!-- YOLOv8 Vision -->
                 <div class="component-card">
-                    <img src="images/3p0ch/training-status.jpg" alt="YOLOv8 Object Detection" class="component-image">
+                    <img src="images/training-status.jpg" alt="YOLOv8 Object Detection" class="component-image">
                     <div class="component-content">
                         <div class="component-name">YOLOv8</div>
                         <div class="component-category">Object Detection</div>

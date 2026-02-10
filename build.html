@@ -50,6 +50,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
         .logo-link {
@@ -549,18 +556,20 @@
             <a href="index.html" class="logo-link">
                 <div class="logo-text">3p0ch</div>
             </a>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                ☰
-            </button>
-            <nav>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="tech.html">Tech</a></li>
-                    <li><a href="build.html" class="active">Build</a></li>
-                    <li><a href="compete.html">Compete</a></li>
-                    <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
-                </ul>
-            </nav>
+            <div class="nav-right">
+                <nav>
+                    <ul class="nav-links" id="navLinks">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tech.html">Tech</a></li>
+                        <li><a href="build.html" class="active">Build</a></li>
+                        <li><a href="compete.html">Compete</a></li>
+                        <li><a href="https://github.com/denny-architect/3p0ch" target="_blank">GitHub</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    ☰
+                </button>
+            </div>
         </div>
     </header>
 
@@ -713,7 +722,7 @@
             <h2 class="section-title">Build Gallery</h2>
             <div class="media-grid">
                 <div class="media-card">
-                    <img src="images/3p0ch/blueprint-schematic.jpg" alt="CAD Blueprint" class="media-image">
+                    <img src="images/blueprint-schematic.jpg" alt="CAD Blueprint" class="media-image">
                     <div class="media-content">
                         <div class="media-title">CAD Design</div>
                         <div class="media-description">
@@ -724,7 +733,7 @@
                 </div>
 
                 <div class="media-card">
-                    <img src="images/3p0ch/exploded-wireframe.jpg" alt="Exploded View" class="media-image">
+                    <img src="images/exploded-wireframe.jpg" alt="Exploded View" class="media-image">
                     <div class="media-content">
                         <div class="media-title">Component Layout</div>
                         <div class="media-description">
@@ -735,7 +744,7 @@
                 </div>
 
                 <div class="media-card">
-                    <img src="images/3p0ch/combat-hud.jpg" alt="Combat HUD Mockup" class="media-image">
+                    <img src="images/combat-hud.jpg" alt="Combat HUD Mockup" class="media-image">
                     <div class="media-content">
                         <div class="media-title">Future Vision System</div>
                         <div class="media-description">
@@ -752,8 +761,8 @@
             <h2 class="section-title">Test Footage</h2>
             <div class="video-grid">
                 <div class="video-card">
-                    <video class="video-player" controls playsinline webkit-playsinline poster="images/3p0ch/hero-render.jpg">
-                        <source src="images/3p0ch/video-combat-ignition.mp4" type="video/mp4">
+                    <video class="video-player" controls playsinline webkit-playsinline poster="images/hero-render.jpg">
+                        <source src="images/video-combat-ignition.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <div class="video-info">
@@ -765,8 +774,8 @@
                 </div>
 
                 <div class="video-card">
-                    <video class="video-player" controls playsinline webkit-playsinline poster="images/3p0ch/hero-render.jpg">
-                        <source src="images/3p0ch/video-combat-action.mp4" type="video/mp4">
+                    <video class="video-player" controls playsinline webkit-playsinline poster="images/hero-render.jpg">
+                        <source src="images/video-combat-action.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <div class="video-info">
